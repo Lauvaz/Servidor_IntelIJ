@@ -8,6 +8,7 @@ public class Items {
     public Items(){}
 
     public Items(String name, String description) {
+        this();
         this.name = name;
         this.description = description;
     }

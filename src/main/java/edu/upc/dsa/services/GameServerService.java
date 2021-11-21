@@ -28,8 +28,8 @@ public class GameServerService {
             this.gsm.addUser("Pau","123","pau.ruiz.blanco@upc.edu");
             this.gsm.addUser("Laura","321","laura.vazquez.husillos@upc.edu");
             this.gsm.addUser("Alba","231","alba.munoz.gil@upc.edu");
-            this.gsm.addItem("Pistola","Descativa un obstaculo");
-            this.gsm.addItem("Taladro","Atraviesa una pared");
+            this.gsm.addItem("Pistola","Descativa");
+            this.gsm.addItem("Taladro","Atraviesa");
 
         }
 
@@ -52,16 +52,16 @@ public class GameServerService {
     }
 
     @POST
-    @ApiOperation(value = "create a new Object", notes = "asdasd")
+    @ApiOperation(value = "create a new Item", notes = "asdasd")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response= Items.class),
             @ApiResponse(code = 500, message = "Validation Error")
 
     })
 
-    @Path("/addObject/")
+    @Path("/addItems/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addObject(Items items) {
+    public Response addItem(Items items) {
 
         if (items.getName()==null || items.getDescription()==null)  return Response.status(500).entity(items).build();
         this.gsm.addItem(items.getName(), items.getDescription());
@@ -84,17 +84,17 @@ public class GameServerService {
 
     }
     @GET
-    @ApiOperation(value = "get all Objects", notes = "asdasd")
+    @ApiOperation(value = "get all Items", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Object.class, responseContainer="List"),
+            @ApiResponse(code = 201, message = "Successful", response = Items.class, responseContainer="List"),
     })
     @Path("/itemList")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllObjects() {
+    public Response getItemList() {
 
-        List<Items> objects = this.gsm.getItemList();
+        List<Items> items = this.gsm.getItemList();
 
-        GenericEntity<List<Items>> entity = new GenericEntity<List<Items>>(objects) {};
+        GenericEntity<List<Items>> entity = new GenericEntity<List<Items>>(items) {};
         return Response.status(201).entity(entity).build()  ;
 
     }
@@ -144,13 +144,13 @@ public class GameServerService {
 
         if (gsm.getUser(name)==null) return Response.status(404).build();
         else gsm.deleteUser(name,password,email);
-        return Response.status(200).build();
+        return Response.status(201).build();
     }
 
     @POST
     @ApiOperation(value = "Login", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK",response= LoginAUX.class),
+            @ApiResponse(code = 201, message = "OK",response= LoginAUX.class),
             @ApiResponse(code = 404, message = "Not found (user or pass not match)")
 
     })
@@ -160,12 +160,12 @@ public class GameServerService {
     public Response loginUser(LoginAUX login) {
         gsm.loginUser(login.getName(),login.getPassword());
         if (login.getName()==null || login.getPassword()==null)  return Response.status(404).build();
-        return Response.status(200).entity(login).build();
+        return Response.status(201).entity(login).build();
     }
     @GET
     @ApiOperation(value = "Logout", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 201, message = "OK"),
             @ApiResponse(code = 404, message = "Not found (user not found)")
     })
     @Path("/logout/{name}")
@@ -173,7 +173,7 @@ public class GameServerService {
     public Response logoutUser(@PathParam("name") String name) {
         if (gsm.getUser(name)== null) return Response.status(404).build();
         else gsm.logOutUser(name);
-        return Response.status(200).build();
+        return Response.status(201).build();
     }
     /* @PUT
     @ApiOperation(value = "update a Track", notes = "asdasd")

@@ -10,13 +10,13 @@ import org.apache.log4j.Logger;
 public class ServerGameManagerImpl implements ServerGameManager {
     private static ServerGameManager instance;
     private HashMap<String, User> users;
-    protected List<Items> objects;
+    protected List<Items> items;
     final static Logger logger = Logger.getLogger(ServerGameManagerImpl.class);
 
     private ServerGameManagerImpl() {
 
         this.users = new HashMap<>();
-        this.objects = new LinkedList<>();
+        this.items = new ArrayList<>();
     }
     public static ServerGameManager getInstance() {
         if (instance==null) instance = new ServerGameManagerImpl();
@@ -102,14 +102,19 @@ public class ServerGameManagerImpl implements ServerGameManager {
             return null;
             }
     }
-
+    @Override
+    public Items addItem(Items items) {
+        logger.info("new Object " + items.getName() +": " + items.getDescription());
+        this.items.add(items);
+        logger.info("new Object added");
+        return items;
+    }
     @Override
     public Items addItem(String name, String descritpion) {
         logger.info("new Object " + name +": " + descritpion);
-        Items item = addItem(name,descritpion);
-        this.objects.add(item);
+
         logger.info("new Object added");
-        return item;
+        return this.addItem(new Items(name,descritpion));
     }
 
     @Override
@@ -120,17 +125,17 @@ public class ServerGameManagerImpl implements ServerGameManager {
         }
         else logger.info(items+" deleted ");
 
-        this.objects.remove(items);
+        this.items.remove(items);
 
     }
     public Items getItem(String name) {
         logger.info("getObject("+name+")");
 
-        for (Items obj: this.objects) {
-            if (obj.equals(name)) {
-                logger.info("getObject("+name+"): "+obj);
+        for (Items items: this.items) {
+            if (items.equals(name)) {
+                logger.info("getObject("+name+"): "+items);
 
-                return obj;
+                return items;
             }
         }
         logger.warn("not found " + name);
@@ -139,7 +144,7 @@ public class ServerGameManagerImpl implements ServerGameManager {
 
     @Override
     public List<Items> getItemList() {
-        return this.objects;
+        return this.items;
     }
 
     public static void delete(){
@@ -149,6 +154,7 @@ public class ServerGameManagerImpl implements ServerGameManager {
 
     public void clear(){
         users.clear();
+        items.clear();
         logger.info("Instance GameManagerImpl clear");
     }
 
