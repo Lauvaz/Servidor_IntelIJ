@@ -4,7 +4,7 @@ package edu.upc.dsa.services;
 import edu.upc.dsa.ServerGameManager;
 import edu.upc.dsa.ServerGameManagerImpl;
 import edu.upc.dsa.models.*;
-import edu.upc.dsa.models.Object;
+import edu.upc.dsa.models.Items;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -16,8 +16,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Api(value = "/users", description = "Endpoint to GameServer Service")
-@Path("/users")
+@Api(value = "/GameServer", description = "Endpoint to GameServer Service")
+@Path("/GameServer")
 public class GameServerService {
 
     private ServerGameManager gsm;
@@ -28,8 +28,8 @@ public class GameServerService {
             this.gsm.addUser("Pau","123","pau.ruiz.blanco@upc.edu");
             this.gsm.addUser("Laura","321","laura.vazquez.husillos@upc.edu");
             this.gsm.addUser("Alba","231","alba.munoz.gil@upc.edu");
-            this.gsm.addObject("Pistola","Descativa un obstaculo");
-            this.gsm.addObject("Taladro","Atraviesa una pared");
+            this.gsm.addItem("Pistola","Descativa un obstaculo");
+            this.gsm.addItem("Taladro","Atraviesa una pared");
 
         }
 
@@ -42,7 +42,7 @@ public class GameServerService {
             @ApiResponse(code = 500, message = "Validation Error")
 
     })
-    @Path("/")
+    @Path("/register/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addUser(UserAUX user) {
         if (user.getName()==null || user.getPassword()==null || user.getMail()==null)  return Response.status(500).entity(user).build();
@@ -54,18 +54,18 @@ public class GameServerService {
     @POST
     @ApiOperation(value = "create a new Object", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response=Object.class),
+            @ApiResponse(code = 201, message = "Successful", response= Items.class),
             @ApiResponse(code = 500, message = "Validation Error")
 
     })
 
-    @Path("/")
+    @Path("/addObject/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addObject(Object object) {
+    public Response addObject(Items items) {
 
-        if (object.getName()==null || object.getDescription()==null)  return Response.status(500).entity(object).build();
-        this.gsm.addObject(object.getName(), object.getDescription());
-        return Response.status(201).entity(object).build();
+        if (items.getName()==null || items.getDescription()==null)  return Response.status(500).entity(items).build();
+        this.gsm.addItem(items.getName(), items.getDescription());
+        return Response.status(201).entity(items).build();
     }
 
     @GET
@@ -73,7 +73,7 @@ public class GameServerService {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = User.class, responseContainer="List"),
     })
-    @Path("/")
+    @Path("/userList/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllUsers() {
 
@@ -83,24 +83,24 @@ public class GameServerService {
         return Response.status(201).entity(entity).build() ;
 
     }
-   /* @GET
+    @GET
     @ApiOperation(value = "get all Objects", notes = "asdasd")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Object.class, responseContainer="List"),
     })
-    @Path("/")
+    @Path("/itemList")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllObjects() {
 
-        List<Object> objects = this.gsm.getObjectList();
+        List<Items> objects = this.gsm.getItemList();
 
-        GenericEntity<List<Object>> entity = new GenericEntity<List<Object>>(objects) {};
+        GenericEntity<List<Items>> entity = new GenericEntity<List<Items>>(objects) {};
         return Response.status(201).entity(entity).build()  ;
 
     }
 
 
-
+/*
     @GET
     @ApiOperation(value = "get all Track", notes = "asdasd")
     @ApiResponses(value = {
@@ -125,7 +125,7 @@ public class GameServerService {
             @ApiResponse(code = 201, message = "Successful", response = User.class),
             @ApiResponse(code = 404, message = "User not found")
     })
-    @Path("/{name}")
+    @Path("/userInfo/{name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(@PathParam("name") String name) {
         User user = this.gsm.getUser(name);
@@ -139,7 +139,7 @@ public class GameServerService {
             @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 404, message = "User not found")
     })
-    @Path("/{name}/{password}/{email}")
+    @Path("/deleteUser/{name}/{password}/{email}")
     public Response deleteUser(@PathParam("name") String name,@PathParam("password")String password,@PathParam("email") String email) {
 
         if (gsm.getUser(name)==null) return Response.status(404).build();
@@ -155,7 +155,7 @@ public class GameServerService {
 
     })
 
-    @Path("/login")
+    @Path("/login/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response loginUser(LoginAUX login) {
         gsm.loginUser(login.getName(),login.getPassword());

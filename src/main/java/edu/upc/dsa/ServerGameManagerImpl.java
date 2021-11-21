@@ -3,13 +3,14 @@ package edu.upc.dsa;
 import java.util.*;
 
 import edu.upc.dsa.models.User;
+import edu.upc.dsa.models.Items;
 import org.apache.log4j.Logger;
 
 
 public class ServerGameManagerImpl implements ServerGameManager {
     private static ServerGameManager instance;
     private HashMap<String, User> users;
-    protected List<Object> objects;
+    protected List<Items> objects;
     final static Logger logger = Logger.getLogger(ServerGameManagerImpl.class);
 
     private ServerGameManagerImpl() {
@@ -103,29 +104,29 @@ public class ServerGameManagerImpl implements ServerGameManager {
     }
 
     @Override
-    public Object addObject(String name, String descritpion) {
+    public Items addItem(String name, String descritpion) {
         logger.info("new Object " + name +": " + descritpion);
-        Object object = addObject(name,descritpion);
-        this.objects.add(object);
+        Items item = addItem(name,descritpion);
+        this.objects.add(item);
         logger.info("new Object added");
-        return object;
+        return item;
     }
 
     @Override
-    public void deleteObject(String name) {
-        Object obj = (name);
-        if (obj==null) {
-            logger.warn("not found " + obj);
+    public void deleteItems(String name) {
+        String items = (name);
+        if (items==null) {
+            logger.warn("not found " + items);
         }
-        else logger.info(obj+" deleted ");
+        else logger.info(items+" deleted ");
 
-        this.objects.remove(obj);
+        this.objects.remove(items);
 
     }
-    public Object getObject(String name) {
+    public Items getItem(String name) {
         logger.info("getObject("+name+")");
 
-        for (Object obj: this.objects) {
+        for (Items obj: this.objects) {
             if (obj.equals(name)) {
                 logger.info("getObject("+name+"): "+obj);
 
@@ -137,7 +138,7 @@ public class ServerGameManagerImpl implements ServerGameManager {
     }
 
     @Override
-    public List<Object> getObjectList() {
+    public List<Items> getItemList() {
         return this.objects;
     }
 
