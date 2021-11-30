@@ -2,8 +2,7 @@ package edu.upc.dsa;
 
 import java.util.*;
 
-import edu.upc.dsa.models.User;
-import edu.upc.dsa.models.Items;
+import edu.upc.dsa.models.*;
 import org.apache.log4j.Logger;
 
 
