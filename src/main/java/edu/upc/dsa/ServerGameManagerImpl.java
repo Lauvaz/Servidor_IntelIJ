@@ -40,6 +40,21 @@ public class ServerGameManagerImpl implements ServerGameManager {
 
     @Override
     public User addUser(String name, String password, String email) {
+        Session session = null;
+        try {
+            session = FactorySession.openSession();
+            User user=new User(name,password,email);
+            session.save(user);
+            logger.info("name: "+ name +"password: "+ "email: "+email);
+        }
+        catch (Exception e)
+        {
+            logger.info("Error al insertar usuario");
+        }
+        finally {
+            session.close();
+        }
+
         return this.addUser(new User(name,password,email));
     }
 

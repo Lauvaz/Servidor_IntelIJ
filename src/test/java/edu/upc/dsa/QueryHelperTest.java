@@ -10,8 +10,8 @@ public class QueryHelperTest {
 
     @Test
     public void testQueryINSERT() {
-        Assert.assertEquals("INSERT INTO Employee (ID,name,surname,salary) VALUES (?,?,?,?)",
-                QueryHelper.createQueryINSERT(new User("Juan", "lopez", "333333")));
+        Assert.assertEquals("INSERT INTO UserAUX (ID,name,password,mail) VALUES (?,?,?,?)",
+                QueryHelper.createQueryINSERT(new UserAUX("Juan", "lopez", "333333")));
     }
 
     @Test

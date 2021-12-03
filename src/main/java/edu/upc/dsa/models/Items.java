@@ -2,6 +2,7 @@ package edu.upc.dsa.models;
 
 public class Items {
 
+    private int id;
     private String name;
     private String description;
 

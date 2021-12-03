@@ -74,9 +74,11 @@ public class ObjectHelper {
         return ret;
     }
 
-    public static void main(String[] args) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    /*public static void main(String[] args) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         String ret = (String)getter(new User("PAU", "RUBL","hola"), "password");
 
         System.out.println(ret);
     }
+
+     */
 }

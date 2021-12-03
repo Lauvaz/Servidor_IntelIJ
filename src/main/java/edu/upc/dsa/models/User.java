@@ -1,7 +1,7 @@
 package edu.upc.dsa.models;
 
 public class User {
-
+    private int ID;
     private String name;
     private String password;
     private String mail;
